@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>湖南像素文旅 · 神秘来信</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: "PingFang SC", sans-serif;
+    background: #000;
+    color: #fff;
+    text-align: center;
+}
+
+/* 页面切换容器 */
+.page {
+    display: none;
+    padding: 20px;
+}
+
+.active {
+    display: block;
+}
+
+/* 开场图背景 */
+#startPage {
+    background-image: url("YOUR_GUFENG_IMAGE_URL");
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+}
+
+/* 信封 */
+.envelope {
+    width: 160px;
+    margin: 0 auto;
+    margin-top: 65vh;
+    cursor: pointer;
+    animation: float 3s infinite ease-in-out;
+}
+
+@keyframes float {
+    0% { transform: translateY(0);}
+    50% { transform: translateY(-10px);}
+    100% { transform: translateY(0);}
+}
+
+/* 弹出的信 */
+#letterBox {
+    width: 80%;
+    margin: 10vh auto 0;
+    padding: 20px;
+    background: rgba(0,0,0,0.65);
+    border: 1px solid #fff;
+    border-radius: 12px;
+    display: none;
+}
+
+/* 按钮 */
+.btn {
+    padding: 12px 20px;
+    background: #ffcc66;
+    color: #000;
+    border-radius: 8px;
+    margin-top: 20px;
+    display: inline-block;
+}
+
+.quiz-img {
+    width: 80%;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+</style>
+
+</head>
+<body>
+
+<!-- 1. 开场页：古风景色 + 信封 -->
+<div id="startPage" class="page active">
+    <img src="YOUR_ENVELOPE_IMAGE_URL" class="envelope" onclick="openEnvelope()">
+</div>
+
+<!-- 2. 信页：规则怪谈式开场 -->
+<div id="letterPage" class="page">
+    <div id="letterBox">
+        <h2>你有一封来自湖南的像素来信</h2>
+        <p>
+        若想看见湖南真正的模样，请遵守三条探索规则：<br><br>
+        规则一：每答对一道题，像素世界将亮起一个景点。<br>
+        规则二：若答错，城市会给你轻声提示。<br>
+        规则三：解锁全部景点后，你将看到“像素湖南的真相”。<br>
+        </p>
+
+        <div class="btn" onclick="goToQuiz1()">开始探索</div>
+    </div>
+</div>
+
+<!-- 3. 答题页 1 -->
+<div id="quiz1" class="page">
+    <h2>像素谜题 1</h2>
+    <img class="quiz-img" src="YOUR_SPOT1_IMAGE_URL">
+    <p>江风、青年雕像和烟火组成了这座城市的夜色，这是哪里？</p>
+    <div class="btn" onclick="nextCorrect('quiz2')">橘子洲</div>
+    <div class="btn" onclick="alert('提示：这里有青年与江风。')">岳麓山</div>
+</div>
+
+<!-- 4. 答题页 2 -->
+<div id="quiz2" class="page">
+    <h2>像素谜题 2</h2>
+    <img class="quiz-img" src="YOUR_SPOT2_IMAGE_URL">
+    <p>“通往云端的阶梯”，常被称为仙境之路，这是哪里？</p>
+    <div class="btn" onclick="nextCorrect('endPage')">张家界</div>
+    <div class="btn" onclick="alert('再想想，云端一般不长在南边。')">衡山</div>
+</div>
+
+<!-- 5. 最终页 -->
+<div id="endPage" class="page">
+    <h2>你已解锁像素湖南的全部秘密</h2>
+    <p>
+        像素只是入口。<br>
+        真正的湖南，远比你想象的更鲜活。
+    </p>
+    <p>欢迎亲自来看看，像素世界之外的真实风景。</p>
+    <div class="btn" onclick="location.reload()">重新探索</div>
+</div>
+
+<script>
+function openEnvelope() {
+    document.getElementById("startPage").classList.remove("active");
+    document.getElementById("letterPage").classList.add("active");
+    document.getElementById("letterBox").style.display = "block";
+}
+
+function goToQuiz1() {
+    document.getElementById("letterPage").classList.remove("active");
+    document.getElementById("quiz1").classList.add("active");
+}
+
+function nextCorrect(nextPageId) {
+    document.querySelector(".page.active").classList.remove("active");
+    document.getElementById(nextPageId).classList.add("active");
+}
+</script>
+
+</body>
+</html>
