@@ -3,18 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>湖南文旅信封H5</title>
+<title>湖南文旅信封互动H5</title>
 <style>
   body, html {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    font-family: "Microsoft YaHei", sans-serif;
+    margin:0;
+    padding:0;
+    height:100%;
+    font-family:"Microsoft YaHei",sans-serif;
     background: url('https://file.zhuyitai.com/feedback/202511/28/8dbc723e73735001fb69d6e7911937c9.jpg') no-repeat center/cover;
     background-size: cover;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+    transition: background 0.5s;
   }
 
   /* 信封 */
@@ -22,117 +24,110 @@
     position: relative;
     width: 250px;
     height: 180px;
+    cursor:pointer;
     perspective: 800px;
-    cursor: pointer;
   }
-
   .envelope-base {
     width: 100%;
     height: 100%;
-    background: #fdf5e6; /* 米白色 */
+    background: #fdf5e6; /* 米白 */
     border-radius: 8px;
     position: absolute;
     top:0; left:0;
-    z-index: 1;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    z-index:1;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
   }
-
   .flap {
     position: absolute;
-    width: 50%;
-    height: 100%;
+    width: 100%;
+    height: 50%;
     background: #fdf5e6;
-    top:0;
-    transform-origin: left;
-    transition: transform 1s;
-    z-index: 2;
-    border-radius: 8px 0 0 8px;
+    top:0; left:0;
+    transform-origin: top;
+    transition: transform 0.8s ease;
+    border-radius: 8px 8px 0 0;
+    z-index:2;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
   }
-  .flap.right {
-    right:0; left:auto;
-    transform-origin: right;
-    border-radius: 0 8px 8px 0;
-  }
-
-  .open .flap.left { transform: rotateY(-120deg); }
-  .open .flap.right { transform: rotateY(120deg); }
+  .open .flap { transform: rotateX(-180deg); }
 
   /* 信纸 */
   .letter {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 220px;
-    min-height: 250px;
-    transform: translate(-50%, -50%) scale(0);
+    width: 90%;
+    max-width: 600px;
+    min-height: 400px;
+    transform: translate(-50%,-50%) scale(0.8);
     background: #fffdf0;
-    border-radius: 5px;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
-    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+    padding: 25px 20px;
     opacity: 0;
-    transition: all 0.6s ease;
+    transition: all 0.8s ease;
     z-index: 3;
+    overflow-y: auto;
   }
-  .letter.show {
-    transform: translate(-50%, -50%) scale(1);
-    opacity: 1;
-  }
-
+  .letter.show { transform: translate(-50%,-50%) scale(1); opacity:1; }
   .letter p {
-    margin: 10px 0;
-    border-bottom: 1px dashed #ccc; /* 文字下横线 */
-    padding-bottom: 5px;
+    margin: 15px 0;
+    border-bottom: 1px dashed #ccc;
+    padding-bottom:5px;
+    font-size:1.05em;
   }
-
   #openQuizBtn {
-    display: block;
-    margin: 15px auto 0;
-    padding: 8px 15px;
-    background: #ff9e3b;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+    display:block;
+    margin:20px auto 0;
+    padding:10px 25px;
+    border:none;
+    border-radius:5px;
+    background: linear-gradient(90deg, #fdf5e6, #f0e6d2);
+    color:#333;
+    font-weight:bold;
+    cursor:pointer;
   }
-  #openQuizBtn:hover { background: #ff6a3b; }
+  #openQuizBtn:hover { background: linear-gradient(90deg,#f0e6d2,#fdf5e6); }
 
   /* 答题页面 */
   .quiz-container {
-    display: none;
-    padding: 20px;
-    text-align: center;
-    color: #fff;
-    min-height: 100vh;
+    display:none;
+    padding:20px;
+    text-align:center;
+    color:#fff;
+    min-height:100vh;
+    transition: opacity 0.5s;
   }
-
-  .question { margin: 20px 0; font-size: 1.1em; }
+  .quiz-container.show { display:block; opacity:1; }
+  .question { margin: 20px 0; font-size:1.2em; font-weight:bold; }
   .option {
-    display: block;
-    background: rgba(255,158,59,0.9);
-    color: white;
-    padding: 10px;
-    margin: 8px auto;
-    width: 80%;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background 0.3s;
+    display:block;
+    padding:12px;
+    margin:10px auto;
+    width:80%;
+    max-width:400px;
+    border-radius:6px;
+    background: linear-gradient(90deg,#fdf5e6,#f0e6d2);
+    color:#333;
+    font-weight:bold;
+    cursor:pointer;
+    transition: all 0.3s;
+    box-shadow:0 3px 6px rgba(0,0,0,0.2);
   }
-  .option:hover { background: rgba(255,106,59,0.9); }
-  .feedback { margin-top: 10px; font-size: 0.95em; color: #ffebcd; }
-
+  .option:hover { transform: translateY(-2px); box-shadow:0 5px 10px rgba(0,0,0,0.25); }
+  .feedback { margin-top:12px; font-size:1em; color:#fff8dc; font-style:italic; }
   #nextBtn {
-    margin-top: 15px;
-    padding: 10px 20px;
-    border: none;
+    margin-top:15px;
+    padding:10px 25px;
+    border:none;
     border-radius:5px;
-    background: #ff9e3b;
-    color: white;
-    cursor: pointer;
-    font-size: 1em;
-    display: none;
+    background: linear-gradient(90deg,#fdf5e6,#f0e6d2);
+    color:#333;
+    font-weight:bold;
+    cursor:pointer;
+    display:none;
   }
-  #nextBtn:hover { background: #ff6a3b; }
-
+  #nextBtn:hover { background: linear-gradient(90deg,#f0e6d2,#fdf5e6); }
 </style>
 </head>
 <body>
@@ -140,15 +135,14 @@
 <!-- 信封 -->
 <div class="envelope-container" id="envelope">
   <div class="envelope-base"></div>
-  <div class="flap left"></div>
-  <div class="flap right"></div>
+  <div class="flap"></div>
 </div>
 
 <!-- 信纸 -->
 <div class="letter" id="letter">
   <h3>探索湖南美景</h3>
-  <p>橘子洲头，江水潺潺，历史文化与自然景观交融。</p >
-  <p>岳麓山下，书声朗朗，千年学府诉说文化底蕴。</p >
+  <p>橘子洲，江水潺潺，风光与历史交织在一起，仿佛时间也慢了下来。</p >
+  <p>岳麓山下，书声朗朗，千年学府承载着厚重的文化底蕴，山色与学问相映成趣。</p >
   <button id="openQuizBtn">开始答题</button>
 </div>
 
@@ -170,57 +164,52 @@ const optionsDiv = document.getElementById('options');
 const feedback = document.getElementById('feedback');
 const nextBtn = document.getElementById('nextBtn');
 
-envelope.addEventListener('click', () => {
+envelope.addEventListener('click', ()=>{
   envelope.classList.add('open');
-  setTimeout(() => {
-    letter.classList.add('show');
-  }, 600); // 翻开动画后显示信纸
+  setTimeout(()=>{ letter.classList.add('show'); }, 800);
 });
 
-// 题库示例（4题）
 const quizData = [
   {
     scene:'橘子洲',
-    bg:'https://file.zhuyitai.com/feedback/202511/28/8dbc723e73735001fb69d6e7911937c9.jpg',
+    bg:'https://cdncs.ykt.cbern.com.cn/v0.1/download?path=/zxx_feedback/qdqqd/1764339387893.png',
     questions:[
-      {q:'橘子洲位于哪条河中？', options:['湘江','浏阳河','资江','沅江'], answer:0, tip:'正确！橘子洲位于湘江中。'},
-      {q:'橘子洲因哪位人物著名？', options:['毛泽东','李白','岳飞','诸葛亮'], answer:0, tip:'没错，毛泽东年轻时写下《沁园春·长沙》。'}
+      {q:'橘子洲位于哪条河中？', options:['湘江','浏阳河','资江','沅江'], answer:0, tip:'橘子洲位于湘江中，长沙的标志景点。'},
+      {q:'橘子洲因哪位人物而闻名？', options:['毛泽东','李白','岳飞','诸葛亮'], answer:0, tip:'毛泽东曾在青年时期写下《沁园春·长沙》。'}
     ]
   },
   {
     scene:'岳麓山',
     bg:'https://cdncs.ykt.cbern.com.cn/v0.1/download?path=/zxx_feedback/qdqqd/1764339387893.png',
     questions:[
-      {q:'岳麓山的著名学府？', options:['湖南大学','中南大学','北京大学','武汉大学'], answer:0, tip:'正确！湖南大学位于岳麓山下。'},
-      {q:'岳麓山以什么景观闻名？', options:['自然山水','沙漠','海岸线','平原'], answer:0, tip:'没错，岳麓山以秀丽自然景观闻名。'}
+      {q:'岳麓山的著名学府？', options:['湖南大学','中南大学','北京大学','武汉大学'], answer:0, tip:'湖南大学位于岳麓山下，千年学府。'},
+      {q:'岳麓山以什么景观闻名？', options:['自然山水','沙漠','海岸线','平原'], answer:0, tip:'岳麓山以秀丽的自然景观和文化底蕴闻名。'}
     ]
   }
 ];
 
 let currentScene=0,currentQ=0;
 
-// 开始答题
 openQuizBtn.addEventListener('click',()=>{
-  letter.style.display='none';
+  letter.classList.remove('show');
   envelope.style.display='none';
-  quizContainer.style.display='block';
+  quizContainer.classList.add('show');
   document.body.style.backgroundImage=`url(${quizData[currentScene].bg})`;
   loadQuestion();
 });
 
 function loadQuestion(){
-  const qData=quizData[currentScene].questions[currentQ];
-  questionText.textContent=qData.q;
-  optionsDiv.innerHTML='';
-  feedback.textContent='';
+  const qData = quizData[currentScene].questions[currentQ];
+  questionText.textContent = qData.q;
+  optionsDiv.innerHTML = '';
+  feedback.textContent = '';
   nextBtn.style.display='none';
   qData.options.forEach((opt,idx)=>{
     const span=document.createElement('span');
-    span.textContent=opt;
+    span.textContent = opt;
     span.className='option';
     span.addEventListener('click',()=>{
-      if(idx===qData.answer){ feedback.textContent=qData.tip; }
-      else { feedback.textContent='提示：'+qData.tip; }
+      feedback.textContent = (idx===qData.answer)? '正确！'+qData.tip:'错误，提示：'+qData.tip;
       nextBtn.style.display='inline-block';
     });
     optionsDiv.appendChild(span);
