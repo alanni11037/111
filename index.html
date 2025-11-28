@@ -3,75 +3,106 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>湖南文旅互动H5</title>
+<title>湖南文旅信封H5</title>
 <style>
   body, html {
     margin: 0;
     padding: 0;
     height: 100%;
     font-family: "Microsoft YaHei", sans-serif;
-    transition: background 0.5s;
+    background: url('https://file.zhuyitai.com/feedback/202511/28/8dbc723e73735001fb69d6e7911937c9.jpg') no-repeat center/cover;
     background-size: cover;
-    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
-  /* 首页信封 */
+  /* 信封 */
   .envelope-container {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 300px;
-    height: 200px;
-    transform: translate(-50%, -50%);
-    perspective: 1000px;
+    position: relative;
+    width: 250px;
+    height: 180px;
+    perspective: 800px;
     cursor: pointer;
   }
 
   .envelope-base {
-    position: absolute;
     width: 100%;
     height: 100%;
-    background: #ff9e3b;
-    border-radius: 5px;
+    background: #fdf5e6; /* 米白色 */
+    border-radius: 8px;
+    position: absolute;
+    top:0; left:0;
     z-index: 1;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
   }
 
   .flap {
     position: absolute;
     width: 50%;
     height: 100%;
-    background: #ff6a3b;
-    top: 0;
+    background: #fdf5e6;
+    top:0;
     transform-origin: left;
     transition: transform 1s;
     z-index: 2;
+    border-radius: 8px 0 0 8px;
   }
-  .flap.right { right: 0; left: auto; transform-origin: right; }
-
-  .content {
-    position: absolute;
-    top: 10px; left: 10px; right: 10px; bottom: 10px;
-    background: rgba(255,255,255,0.95);
-    border-radius: 5px;
-    opacity: 0;
-    padding: 10px;
-    text-align: center;
-    z-index: 0;
-    transition: opacity 1s 0.5s;
-    overflow-y: auto;
-    display: none;
+  .flap.right {
+    right:0; left:auto;
+    transform-origin: right;
+    border-radius: 0 8px 8px 0;
   }
 
   .open .flap.left { transform: rotateY(-120deg); }
   .open .flap.right { transform: rotateY(120deg); }
-  .open .content { opacity: 1; display: block; }
+
+  /* 信纸 */
+  .letter {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 220px;
+    min-height: 250px;
+    transform: translate(-50%, -50%) scale(0);
+    background: #fffdf0;
+    border-radius: 5px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+    padding: 15px;
+    opacity: 0;
+    transition: all 0.6s ease;
+    z-index: 3;
+  }
+  .letter.show {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+
+  .letter p {
+    margin: 10px 0;
+    border-bottom: 1px dashed #ccc; /* 文字下横线 */
+    padding-bottom: 5px;
+  }
+
+  #openQuizBtn {
+    display: block;
+    margin: 15px auto 0;
+    padding: 8px 15px;
+    background: #ff9e3b;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  #openQuizBtn:hover { background: #ff6a3b; }
 
   /* 答题页面 */
   .quiz-container {
     display: none;
-    text-align: center;
     padding: 20px;
+    text-align: center;
     color: #fff;
+    min-height: 100vh;
   }
 
   .question { margin: 20px 0; font-size: 1.1em; }
@@ -104,19 +135,21 @@
 
 </style>
 </head>
-<body style="background-image: url('https://file.zhuyitai.com/feedback/202511/28/8dbc723e73735001fb69d6e7911937c9.jpg');">
+<body>
 
-<!-- 首页信封 -->
+<!-- 信封 -->
 <div class="envelope-container" id="envelope">
   <div class="envelope-base"></div>
   <div class="flap left"></div>
   <div class="flap right"></div>
-  <div class="content" id="envelopeContent">
-    <h2>湖南文旅</h2>
-    <p>你划着小船来到古楼下，欣赏湖光山色与历史建筑的融合，感受长沙独特的文旅魅力。</p >
-    < img src="https://cdncs.ykt.cbern.com.cn/v0.1/download?path=/zxx_feedback/qdqqd/1764339387893.png" alt="橘子洲" style="width:80%;margin:10px 0;border-radius:5px;">
-    <button id="startQuizBtn" style="margin-top:10px;padding:10px 20px;border:none;border-radius:5px;background:#ff9e3b;color:white;cursor:pointer;">开始答题</button>
-  </div>
+</div>
+
+<!-- 信纸 -->
+<div class="letter" id="letter">
+  <h3>探索湖南美景</h3>
+  <p>橘子洲头，江水潺潺，历史文化与自然景观交融。</p >
+  <p>岳麓山下，书声朗朗，千年学府诉说文化底蕴。</p >
+  <button id="openQuizBtn">开始答题</button>
 </div>
 
 <!-- 答题页面 -->
@@ -129,108 +162,81 @@
 
 <script>
 const envelope = document.getElementById('envelope');
-const envelopeContent = document.getElementById('envelopeContent');
-const startQuizBtn = document.getElementById('startQuizBtn');
+const letter = document.getElementById('letter');
+const openQuizBtn = document.getElementById('openQuizBtn');
 const quizContainer = document.getElementById('quizContainer');
 const questionText = document.getElementById('questionText');
 const optionsDiv = document.getElementById('options');
 const feedback = document.getElementById('feedback');
 const nextBtn = document.getElementById('nextBtn');
 
-// 信封翻开
 envelope.addEventListener('click', () => {
   envelope.classList.add('open');
+  setTimeout(() => {
+    letter.classList.add('show');
+  }, 600); // 翻开动画后显示信纸
 });
 
-// 题库
+// 题库示例（4题）
 const quizData = [
   {
-    scene: '橘子洲',
-    bg: 'https://file.zhuyitai.com/feedback/202511/28/8dbc723e73735001fb69d6e7911937c9.jpg',
-    questions: [
-      {
-        q: '橘子洲位于长沙市哪条河中？',
-        options: ['湘江', '浏阳河', '资江', '沅江'],
-        answer: 0,
-        tip: '正确！橘子洲位于湘江之中，是长沙地标景点。'
-      },
-      {
-        q: '橘子洲因哪位历史人物而著名？',
-        options: ['毛泽东', '李白', '岳飞', '诸葛亮'],
-        answer: 0,
-        tip: '没错，毛泽东曾在年轻时写下《沁园春·长沙》，使橘子洲闻名。'
-      }
+    scene:'橘子洲',
+    bg:'https://file.zhuyitai.com/feedback/202511/28/8dbc723e73735001fb69d6e7911937c9.jpg',
+    questions:[
+      {q:'橘子洲位于哪条河中？', options:['湘江','浏阳河','资江','沅江'], answer:0, tip:'正确！橘子洲位于湘江中。'},
+      {q:'橘子洲因哪位人物著名？', options:['毛泽东','李白','岳飞','诸葛亮'], answer:0, tip:'没错，毛泽东年轻时写下《沁园春·长沙》。'}
     ]
   },
   {
-    scene: '岳麓山',
-    bg: 'https://cdncs.ykt.cbern.com.cn/v0.1/download?path=/zxx_feedback/qdqqd/1764339387893.png',
-    questions: [
-      {
-        q: '岳麓山的著名学府是哪所？',
-        options: ['湖南大学', '中南大学', '北京大学', '武汉大学'],
-        answer: 0,
-        tip: '正确！湖南大学位于岳麓山下，有“千年学府”之称。'
-      },
-      {
-        q: '岳麓山以什么景观闻名？',
-        options: ['自然山水', '沙漠', '海岸线', '平原'],
-        answer: 0,
-        tip: '没错，岳麓山以秀丽自然景观和文化底蕴闻名。'
-      }
+    scene:'岳麓山',
+    bg:'https://cdncs.ykt.cbern.com.cn/v0.1/download?path=/zxx_feedback/qdqqd/1764339387893.png',
+    questions:[
+      {q:'岳麓山的著名学府？', options:['湖南大学','中南大学','北京大学','武汉大学'], answer:0, tip:'正确！湖南大学位于岳麓山下。'},
+      {q:'岳麓山以什么景观闻名？', options:['自然山水','沙漠','海岸线','平原'], answer:0, tip:'没错，岳麓山以秀丽自然景观闻名。'}
     ]
   }
 ];
 
-let currentScene = 0;
-let currentQ = 0;
+let currentScene=0,currentQ=0;
 
 // 开始答题
-startQuizBtn.addEventListener('click', () => {
-  envelope.style.display = 'none';
-  quizContainer.style.display = 'block';
+openQuizBtn.addEventListener('click',()=>{
+  letter.style.display='none';
+  envelope.style.display='none';
+  quizContainer.style.display='block';
+  document.body.style.backgroundImage=`url(${quizData[currentScene].bg})`;
   loadQuestion();
-  document.body.style.backgroundImage = `url(${quizData[currentScene].bg})`;
 });
 
-// 加载题目
-function loadQuestion() {
-  const qData = quizData[currentScene].questions[currentQ];
-  questionText.textContent = qData.q;
-  optionsDiv.innerHTML = '';
-  feedback.textContent = '';
-  nextBtn.style.display = 'none';
-
-  qData.options.forEach((opt, idx) => {
-    const span = document.createElement('span');
-    span.textContent = opt;
-    span.className = 'option';
-    span.addEventListener('click', () => {
-      if(idx === qData.answer){
-        feedback.textContent = qData.tip;
-      } else {
-        feedback.textContent = '提示：' + qData.tip;
-      }
-      nextBtn.style.display = 'inline-block';
+function loadQuestion(){
+  const qData=quizData[currentScene].questions[currentQ];
+  questionText.textContent=qData.q;
+  optionsDiv.innerHTML='';
+  feedback.textContent='';
+  nextBtn.style.display='none';
+  qData.options.forEach((opt,idx)=>{
+    const span=document.createElement('span');
+    span.textContent=opt;
+    span.className='option';
+    span.addEventListener('click',()=>{
+      if(idx===qData.answer){ feedback.textContent=qData.tip; }
+      else { feedback.textContent='提示：'+qData.tip; }
+      nextBtn.style.display='inline-block';
     });
     optionsDiv.appendChild(span);
   });
 }
 
-// 下一题
-nextBtn.addEventListener('click', () => {
+nextBtn.addEventListener('click',()=>{
   currentQ++;
-  if(currentQ >= quizData[currentScene].questions.length){
-    currentScene++;
-    currentQ = 0;
-    if(currentScene >= quizData.length){
-      questionText.textContent = '答题完成！感谢体验湖南文旅之美。';
-      optionsDiv.innerHTML = '';
-      feedback.textContent = '';
-      nextBtn.style.display = 'none';
+  if(currentQ>=quizData[currentScene].questions.length){
+    currentScene++; currentQ=0;
+    if(currentScene>=quizData.length){
+      questionText.textContent='答题完成！感谢体验湖南文旅之美。';
+      optionsDiv.innerHTML=''; feedback.textContent=''; nextBtn.style.display='none';
       return;
-    } else {
-      document.body.style.backgroundImage = `url(${quizData[currentScene].bg})`;
+    }else{
+      document.body.style.backgroundImage=`url(${quizData[currentScene].bg})`;
     }
   }
   loadQuestion();
