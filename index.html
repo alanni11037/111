@@ -3,18 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>湖南文旅信封互动H5</title>
+<title>湖南文旅互动H5</title>
 <style>
   body, html {
-    margin:0;
-    padding:0;
-    height:100%;
+    margin:0; padding:0; height:100%;
     font-family:"Microsoft YaHei",sans-serif;
     background: url('https://file.zhuyitai.com/feedback/202511/28/8dbc723e73735001fb69d6e7911937c9.jpg') no-repeat center/cover;
     background-size: cover;
-    display:flex;
-    justify-content:center;
-    align-items:center;
+    display:flex; justify-content:center; align-items:center;
     overflow:hidden;
     transition: background 0.5s;
   }
@@ -28,106 +24,75 @@
     perspective: 800px;
   }
   .envelope-base {
-    width: 100%;
-    height: 100%;
-    background: #fdf5e6; /* 米白 */
-    border-radius: 8px;
-    position: absolute;
+    width:100%; height:100%;
+    background:#fdf5e6;
+    border-radius:8px;
+    position:absolute;
     top:0; left:0;
     z-index:1;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+    box-shadow:0 4px 10px rgba(0,0,0,0.25);
   }
   .flap {
-    position: absolute;
-    width: 100%;
-    height: 50%;
-    background: #fdf5e6;
+    position:absolute;
+    width:100%; height:50%;
+    background:#fdf5e6;
     top:0; left:0;
     transform-origin: top;
     transition: transform 0.8s ease;
     border-radius: 8px 8px 0 0;
     z-index:2;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    box-shadow:0 4px 8px rgba(0,0,0,0.2);
   }
   .open .flap { transform: rotateX(-180deg); }
 
   /* 信纸 */
   .letter {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 90%;
-    max-width: 600px;
-    min-height: 400px;
+    position:absolute;
+    top:50%; left:50%;
+    width:90%; max-width:600px; min-height:400px;
     transform: translate(-50%,-50%) scale(0.8);
-    background: #fffdf0;
-    border-radius: 8px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.35);
-    padding: 25px 20px;
-    opacity: 0;
+    background:#fffdf0;
+    border-radius:8px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.35);
+    padding:25px 20px;
+    opacity:0;
     transition: all 0.8s ease;
-    z-index: 3;
-    overflow-y: auto;
+    z-index:3;
+    overflow-y:auto;
   }
   .letter.show { transform: translate(-50%,-50%) scale(1); opacity:1; }
-  .letter p {
-    margin: 15px 0;
-    border-bottom: 1px dashed #ccc;
-    padding-bottom:5px;
-    font-size:1.05em;
-  }
+  .letter p { margin:15px 0; border-bottom:1px dashed #ccc; padding-bottom:5px; font-size:1.05em; }
   #openQuizBtn {
-    display:block;
-    margin:20px auto 0;
-    padding:10px 25px;
-    border:none;
-    border-radius:5px;
-    background: linear-gradient(90deg, #fdf5e6, #f0e6d2);
-    color:#333;
-    font-weight:bold;
-    cursor:pointer;
+    display:block; margin:20px auto 0; padding:10px 25px;
+    border:none; border-radius:5px;
+    background: linear-gradient(90deg,#fdf5e6,#f0e6d2);
+    color:#333; font-weight:bold; cursor:pointer;
   }
   #openQuizBtn:hover { background: linear-gradient(90deg,#f0e6d2,#fdf5e6); }
 
   /* 答题页面 */
   .quiz-container {
-    display:none;
-    padding:20px;
-    text-align:center;
-    color:#fff;
-    min-height:100vh;
+    display:none; padding:20px; text-align:center; color:#fff; min-height:100vh;
     transition: opacity 0.5s;
   }
   .quiz-container.show { display:block; opacity:1; }
-  .question { margin: 20px 0; font-size:1.2em; font-weight:bold; }
+  .question { margin:20px 0; font-size:1.2em; font-weight:bold; color:#fffdf0; }
   .option {
-    display:block;
-    padding:12px;
-    margin:10px auto;
-    width:80%;
-    max-width:400px;
-    border-radius:6px;
-    background: linear-gradient(90deg,#fdf5e6,#f0e6d2);
-    color:#333;
-    font-weight:bold;
-    cursor:pointer;
-    transition: all 0.3s;
-    box-shadow:0 3px 6px rgba(0,0,0,0.2);
+    display:block; padding:12px; margin:10px auto; width:80%; max-width:400px;
+    border-radius:6px; background: linear-gradient(90deg,#fffdf0,#f0e6d2);
+    color:#333; font-weight:bold; cursor:pointer;
+    transition: all 0.3s; box-shadow:0 3px 6px rgba(0,0,0,0.2);
   }
   .option:hover { transform: translateY(-2px); box-shadow:0 5px 10px rgba(0,0,0,0.25); }
   .feedback { margin-top:12px; font-size:1em; color:#fff8dc; font-style:italic; }
   #nextBtn {
-    margin-top:15px;
-    padding:10px 25px;
-    border:none;
-    border-radius:5px;
-    background: linear-gradient(90deg,#fdf5e6,#f0e6d2);
-    color:#333;
-    font-weight:bold;
-    cursor:pointer;
+    margin-top:15px; padding:10px 25px;
+    border:none; border-radius:5px;
+    background: linear-gradient(90deg,#fffdf0,#f0e6d2);
+    color:#333; font-weight:bold; cursor:pointer;
     display:none;
   }
-  #nextBtn:hover { background: linear-gradient(90deg,#f0e6d2,#fdf5e6); }
+  #nextBtn:hover { background: linear-gradient(90deg,#f0e6d2,#fffdf0); }
 </style>
 </head>
 <body>
@@ -141,8 +106,8 @@
 <!-- 信纸 -->
 <div class="letter" id="letter">
   <h3>探索湖南美景</h3>
-  <p>橘子洲，江水潺潺，风光与历史交织在一起，仿佛时间也慢了下来。</p >
-  <p>岳麓山下，书声朗朗，千年学府承载着厚重的文化底蕴，山色与学问相映成趣。</p >
+  <p>橘子洲头，江水潺潺，风光与历史交织，仿佛时光也慢了下来。</p >
+  <p>岳麓山下，书声朗朗，千年学府承载文化底蕴，山色与学问相映成趣。</p >
   <button id="openQuizBtn">开始答题</button>
 </div>
 
@@ -174,16 +139,16 @@ const quizData = [
     scene:'橘子洲',
     bg:'https://cdncs.ykt.cbern.com.cn/v0.1/download?path=/zxx_feedback/qdqqd/1764339387893.png',
     questions:[
-      {q:'橘子洲位于哪条河中？', options:['湘江','浏阳河','资江','沅江'], answer:0, tip:'橘子洲位于湘江中，长沙的标志景点。'},
-      {q:'橘子洲因哪位人物而闻名？', options:['毛泽东','李白','岳飞','诸葛亮'], answer:0, tip:'毛泽东曾在青年时期写下《沁园春·长沙》。'}
+      {q:'橘子洲位于哪条河中？', options:['湘江','浏阳河','资江','沅江'], answer:0, tip:'橘子洲坐落在湘江之中，是长沙地标景点。'},
+      {q:'橘子洲因哪位人物而著名？', options:['毛泽东','李白','岳飞','诸葛亮'], answer:0, tip:'年轻的毛泽东曾写下《沁园春·长沙》，让橘子洲声名远扬。'}
     ]
   },
   {
     scene:'岳麓山',
     bg:'https://cdncs.ykt.cbern.com.cn/v0.1/download?path=/zxx_feedback/qdqqd/1764339387893.png',
     questions:[
-      {q:'岳麓山的著名学府？', options:['湖南大学','中南大学','北京大学','武汉大学'], answer:0, tip:'湖南大学位于岳麓山下，千年学府。'},
-      {q:'岳麓山以什么景观闻名？', options:['自然山水','沙漠','海岸线','平原'], answer:0, tip:'岳麓山以秀丽的自然景观和文化底蕴闻名。'}
+      {q:'岳麓山的著名学府？', options:['湖南大学','中南大学','北京大学','武汉大学'], answer:0, tip:'湖南大学位于岳麓山下，是千年学府。'},
+      {q:'岳麓山以什么景观闻名？', options:['自然山水','沙漠','海岸线','平原'], answer:0, tip:'岳麓山以秀丽自然景观和丰富文化底蕴闻名。'}
     ]
   }
 ];
@@ -206,10 +171,15 @@ function loadQuestion(){
   nextBtn.style.display='none';
   qData.options.forEach((opt,idx)=>{
     const span=document.createElement('span');
-    span.textContent = opt;
+    span.textContent=opt;
     span.className='option';
     span.addEventListener('click',()=>{
-      feedback.textContent = (idx===qData.answer)? '正确！'+qData.tip:'错误，提示：'+qData.tip;
+      if(nextBtn.style.display==='inline-block') return; // 防重复点击
+      if(idx===qData.answer){
+        feedback.textContent = '正确！'+qData.tip;
+      } else {
+        feedback.textContent = '嗯……再想想，可以关注景点的文化与历史背景。';
+      }
       nextBtn.style.display='inline-block';
     });
     optionsDiv.appendChild(span);
