@@ -3,88 +3,238 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>湖南文旅信封H5</title>
+<title>湖南文旅互动H5</title>
 <style>
   body, html {
     margin: 0;
     padding: 0;
     height: 100%;
-    overflow: hidden;
     font-family: "Microsoft YaHei", sans-serif;
-    background: url('https://file.zhuyitai.com/feedback/202511/28/8dbc723e73735001fb69d6e7911937c9.jpg') no-repeat center center/cover;
+    transition: background 0.5s;
+    background-size: cover;
+    background-position: center;
   }
 
+  /* 首页信封 */
   .envelope-container {
-    position: relative;
-    width: 200px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300px;
     height: 200px;
-    margin: 50px auto;
-    cursor: pointer;
+    transform: translate(-50%, -50%);
     perspective: 1000px;
+    cursor: pointer;
   }
 
-  .envelope {
+  .envelope-base {
+    position: absolute;
     width: 100%;
     height: 100%;
-    position: absolute;
-    backface-visibility: hidden;
-    transition: transform 1s;
-  }
-
-  .envelope.unopened {
-    transform: rotateY(0deg);
-    z-index: 2;
-  }
-
-  .envelope.opened {
-    transform: rotateY(180deg);
+    background: #ff9e3b;
+    border-radius: 5px;
     z-index: 1;
   }
 
+  .flap {
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    background: #ff6a3b;
+    top: 0;
+    transform-origin: left;
+    transition: transform 1s;
+    z-index: 2;
+  }
+  .flap.right { right: 0; left: auto; transform-origin: right; }
+
   .content {
     position: absolute;
-    top: 220px;
-    width: 100%;
-    text-align: center;
+    top: 10px; left: 10px; right: 10px; bottom: 10px;
+    background: rgba(255,255,255,0.95);
+    border-radius: 5px;
     opacity: 0;
-    transition: opacity 1s;
+    padding: 10px;
+    text-align: center;
+    z-index: 0;
+    transition: opacity 1s 0.5s;
+    overflow-y: auto;
+    display: none;
   }
 
-  .content img {
-    max-width: 80%;
-    margin: 10px 0;
-    border-radius: 10px;
+  .open .flap.left { transform: rotateY(-120deg); }
+  .open .flap.right { transform: rotateY(120deg); }
+  .open .content { opacity: 1; display: block; }
+
+  /* 答题页面 */
+  .quiz-container {
+    display: none;
+    text-align: center;
+    padding: 20px;
+    color: #fff;
   }
 
-  .show {
-    opacity: 1;
+  .question { margin: 20px 0; font-size: 1.1em; }
+  .option {
+    display: block;
+    background: rgba(255,158,59,0.9);
+    color: white;
+    padding: 10px;
+    margin: 8px auto;
+    width: 80%;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
   }
+  .option:hover { background: rgba(255,106,59,0.9); }
+  .feedback { margin-top: 10px; font-size: 0.95em; color: #ffebcd; }
+
+  #nextBtn {
+    margin-top: 15px;
+    padding: 10px 20px;
+    border: none;
+    border-radius:5px;
+    background: #ff9e3b;
+    color: white;
+    cursor: pointer;
+    font-size: 1em;
+    display: none;
+  }
+  #nextBtn:hover { background: #ff6a3b; }
+
 </style>
 </head>
-<body>
+<body style="background-image: url('https://file.zhuyitai.com/feedback/202511/28/8dbc723e73735001fb69d6e7911937c9.jpg');">
 
-<div class="envelope-container" id="envelopeContainer">
-  < img class="envelope unopened" src="https://xiaoiwg.dongfeng-nissan.com.cn/aicc-workbench/res/download/default/temp/images/20251128/6fa5a682116ca454b8cdad0600f85353a927a4f4.png" id="unopenedEnvelope">
-  < img class="envelope opened" src="https://intellcs.sinosafe.com.cn/immessage/api/v1/message/attachment/download?groupName=group1&authorization=EnAfMjUzaQVz&fileName=M00/00/AA/CgNDL2kprh6ACZL2AACgADYMhVM884.png" id="openedEnvelope">
+<!-- 首页信封 -->
+<div class="envelope-container" id="envelope">
+  <div class="envelope-base"></div>
+  <div class="flap left"></div>
+  <div class="flap right"></div>
+  <div class="content" id="envelopeContent">
+    <h2>湖南文旅</h2>
+    <p>你划着小船来到古楼下，欣赏湖光山色与历史建筑的融合，感受长沙独特的文旅魅力。</p >
+    < img src="https://cdncs.ykt.cbern.com.cn/v0.1/download?path=/zxx_feedback/qdqqd/1764339387893.png" alt="橘子洲" style="width:80%;margin:10px 0;border-radius:5px;">
+    <button id="startQuizBtn" style="margin-top:10px;padding:10px 20px;border:none;border-radius:5px;background:#ff9e3b;color:white;cursor:pointer;">开始答题</button>
+  </div>
 </div>
 
-<div class="content" id="content">
-  <h2>湖南名胜</h2>
-  < img src="https://cdncs.ykt.cbern.com.cn/v0.1/download?path=/zxx_feedback/qdqqd/1764339387893.png" alt="橘子洲">
-  < img src="https://cdncs.ykt.cbern.com.cn/v0.1/download?path=/zxx_feedback/qdqqd/1764339387893.png" alt="岳麓山">
+<!-- 答题页面 -->
+<div class="quiz-container" id="quizContainer">
+  <div class="question" id="questionText"></div>
+  <div id="options"></div>
+  <div class="feedback" id="feedback"></div>
+  <button id="nextBtn">下一题</button>
 </div>
 
 <script>
-  const envelopeContainer = document.getElementById('envelopeContainer');
-  const unopened = document.getElementById('unopenedEnvelope');
-  const opened = document.getElementById('openedEnvelope');
-  const content = document.getElementById('content');
+const envelope = document.getElementById('envelope');
+const envelopeContent = document.getElementById('envelopeContent');
+const startQuizBtn = document.getElementById('startQuizBtn');
+const quizContainer = document.getElementById('quizContainer');
+const questionText = document.getElementById('questionText');
+const optionsDiv = document.getElementById('options');
+const feedback = document.getElementById('feedback');
+const nextBtn = document.getElementById('nextBtn');
 
-  envelopeContainer.addEventListener('click', () => {
-    unopened.style.transform = 'rotateY(180deg)';
-    opened.style.transform = 'rotateY(0deg)';
-    content.classList.add('show');
+// 信封翻开
+envelope.addEventListener('click', () => {
+  envelope.classList.add('open');
+});
+
+// 题库
+const quizData = [
+  {
+    scene: '橘子洲',
+    bg: 'https://file.zhuyitai.com/feedback/202511/28/8dbc723e73735001fb69d6e7911937c9.jpg',
+    questions: [
+      {
+        q: '橘子洲位于长沙市哪条河中？',
+        options: ['湘江', '浏阳河', '资江', '沅江'],
+        answer: 0,
+        tip: '正确！橘子洲位于湘江之中，是长沙地标景点。'
+      },
+      {
+        q: '橘子洲因哪位历史人物而著名？',
+        options: ['毛泽东', '李白', '岳飞', '诸葛亮'],
+        answer: 0,
+        tip: '没错，毛泽东曾在年轻时写下《沁园春·长沙》，使橘子洲闻名。'
+      }
+    ]
+  },
+  {
+    scene: '岳麓山',
+    bg: 'https://cdncs.ykt.cbern.com.cn/v0.1/download?path=/zxx_feedback/qdqqd/1764339387893.png',
+    questions: [
+      {
+        q: '岳麓山的著名学府是哪所？',
+        options: ['湖南大学', '中南大学', '北京大学', '武汉大学'],
+        answer: 0,
+        tip: '正确！湖南大学位于岳麓山下，有“千年学府”之称。'
+      },
+      {
+        q: '岳麓山以什么景观闻名？',
+        options: ['自然山水', '沙漠', '海岸线', '平原'],
+        answer: 0,
+        tip: '没错，岳麓山以秀丽自然景观和文化底蕴闻名。'
+      }
+    ]
+  }
+];
+
+let currentScene = 0;
+let currentQ = 0;
+
+// 开始答题
+startQuizBtn.addEventListener('click', () => {
+  envelope.style.display = 'none';
+  quizContainer.style.display = 'block';
+  loadQuestion();
+  document.body.style.backgroundImage = `url(${quizData[currentScene].bg})`;
+});
+
+// 加载题目
+function loadQuestion() {
+  const qData = quizData[currentScene].questions[currentQ];
+  questionText.textContent = qData.q;
+  optionsDiv.innerHTML = '';
+  feedback.textContent = '';
+  nextBtn.style.display = 'none';
+
+  qData.options.forEach((opt, idx) => {
+    const span = document.createElement('span');
+    span.textContent = opt;
+    span.className = 'option';
+    span.addEventListener('click', () => {
+      if(idx === qData.answer){
+        feedback.textContent = qData.tip;
+      } else {
+        feedback.textContent = '提示：' + qData.tip;
+      }
+      nextBtn.style.display = 'inline-block';
+    });
+    optionsDiv.appendChild(span);
   });
+}
+
+// 下一题
+nextBtn.addEventListener('click', () => {
+  currentQ++;
+  if(currentQ >= quizData[currentScene].questions.length){
+    currentScene++;
+    currentQ = 0;
+    if(currentScene >= quizData.length){
+      questionText.textContent = '答题完成！感谢体验湖南文旅之美。';
+      optionsDiv.innerHTML = '';
+      feedback.textContent = '';
+      nextBtn.style.display = 'none';
+      return;
+    } else {
+      document.body.style.backgroundImage = `url(${quizData[currentScene].bg})`;
+    }
+  }
+  loadQuestion();
+});
 </script>
 
 </body>
